@@ -232,9 +232,8 @@
   
   .footer {
     position: sticky;
-    border: 2px dashed;
     flex-shrink: 0;
-    padding: 1rem;
+    padding: 0.2rem;
     background-color: #60992d;
     font-size: 1.2rem;
     font-weight: 600;
@@ -399,6 +398,14 @@
     flex: 0 1 auto;
     margin: 1rem;
     padding: 1.5rem; 
+  }
+
+  .next_page_button a {
+    margin: 2px;
+    justify-content: center;
+    text-align: center;
+    
+    line-height: 0; /* This centers a button's text! */
   }
   
   /* How To Write A Media Query For Small Screens */
