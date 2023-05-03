@@ -8,31 +8,34 @@
   </head>
   <body>
     
-  <div>
+
+  <div class="wrapper">
     <header>
       <h1>Prince George's County Farmer's Markets -- Main Page</h1>
     </header>
-  </div>
-  <div class="container">
-    <div class="left_box">
-      <form action="https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"></form>
+    <div class="container">
+      <div class="left_section">
+        <h3>Form Inputs</h3>
+        <form action="https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"></form>
       <div class="buttons">
         <button type="button" id="data_load">Load Data</button>
       </div>
-    </div>
-    <div class="right_box">
-      <h3>PG County Farmer's Markets</h3>
-      <div class="lds-ellipsis" id="data_load_animation"><div></div><div></div><div></div><div></div>
-    </div>
+          <div class="buttons">
+            <button type="button" id="generate">Generate List</button>
+          </div>
+        </form>
+      </div>
+      <div class="right_section box">
+        <h3>PG County Farmer's Markets</h3>
+        <div class="lds-ellipsis" id="data_load_animation"><div></div><div></div><div></div><div></div>
+      </div>
     </div>
   </div>
-  <div class="buttons">
+  <div class="button_box">
     <a href="index.html">
-      <button>Take Me Back...</button>
+      <button type="button">Take Me Back...</button>
     </a>
   </div>
-  </body>
-  <script src="./script.js"></script>
   <footer class="footer">
     <p>
       Isabella Macdonald GitHub:
@@ -44,4 +47,5 @@
       >
     </p>
   </footer>
+  <script src="./script.js"></script>
 </html>
