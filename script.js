@@ -6,7 +6,6 @@
 function injectHTML(list) {
   console.log("fired injectHTML");
   const target = document.querySelector("#farmers_markets");
-  console.log(typeof(target));
   target.innerHTML = "";
   list.forEach((item, index) => {
     /* string that supplies us restaurant name */
@@ -15,27 +14,7 @@ function injectHTML(list) {
   });
 }
 
-function initChart(chart) {
-  labels = ['bakedgoods', 
-            'cheese', 
-            'crafts', 
-            'flowers', 
-            'eggs', 
-            'seafood', 
-            'herbs', 
-            'vegetables', 
-            'honey', 
-            'jams', 
-            'maple', 
-            'meat', 
-            'nursery', 
-            'nuts', 
-            'plants', 
-            'poultry', 
-            'prepared', 
-            'soap', 
-            'trees', 
-            'wine'];
+function initChart(chart, chartData) {
   const data = {
     labels: labels,
     datasets: [
@@ -43,7 +22,7 @@ function initChart(chart) {
         label: "My First dataset",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
-        data: [0, 10, 5, 2, 20, 30, 45],
+        data: chartData,
       },
     ],
   };
@@ -54,14 +33,25 @@ function initChart(chart) {
     options: {},
   };
 
-  return new Chart(
-    chart,
-    config
-  );
+  return new Chart(chart, config);
 }
 
-function chartData(array) {
-
+function getChartData(arr, labels) {
+    console.log(arr);
+    keys = labels;
+    entries = new Array(keys.length).fill(0);
+  for (i = 0; i < arr.length; i++) {
+    for (j = 0; j < keys.length; j++) {
+        if (arr[i][keys[j]] == 'Yes') {
+            entries[i]++ ;
+        }
+    }
+  }
+  entries.pop();
+  const to_map = new Map([[keys],[entries]]);
+  const data = Object.fromEntries(to_map);
+  console.log(data);
+  return data;
 }
 
 async function mainEvent() {
@@ -82,10 +72,34 @@ async function mainEvent() {
   }
 
   const chartData = parsedData;
-  for (let i = 0; i < chartData.length; i++) {
-    
-  }
-  chartLabels = getLabels(parsedData, "market_name");
+  console.log(chartData);
+
+  // tried to make a function to automate the creation of these labels, but I realized thatit was useless as if
+  // I am handpicking which lables I want anyway, it's a waste of time and doesn't make sense.
+  labels = [
+    "bakedgoods",
+    "cheese",
+    "crafts",
+    "flowers",
+    "eggs",
+    "seafood",
+    "herbs",
+    "vegetables",
+    "honey",
+    "jams",
+    "maple",
+    "meat",
+    "nursery",
+    "nuts",
+    "plants",
+    "poultry",
+    "prepared",
+    "soap",
+    "trees",
+    "wine"
+  ];
+  chartLabels = labels;
+  getChartData(chartData, labels);
   initChart(chartTarget, chartLabels);
 
   /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
@@ -122,12 +136,12 @@ async function mainEvent() {
     injectHTML(storedList);
   });
 
-//   generateListButton.addEventListener("click", (event) => {
-//     console.log("generate new list");
-//     currentList = cutRestaurantList(parsedData);
-//     console.log(currentList);
-//     injectHTML(currentList);
-//   });
+  //   generateListButton.addEventListener("click", (event) => {
+  //     console.log("generate new list");
+  //     currentList = cutRestaurantList(parsedData);
+  //     console.log(currentList);
+  //     injectHTML(currentList);
+  //   });
 
   // textField.addEventListener("input", (event) => {
   //   console.log("input", event.target.value);
