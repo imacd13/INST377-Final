@@ -21,12 +21,18 @@
         <button type="button" id="data_load">Load Data</button>
       </div>
           <div class="buttons">
-            <button type="button" id="generate">Generate List</button>
+            <button type="button" id="generate">Generate Chart</button>
           </div>
         </form>
       </div>
       <div class="right_section box">
         <h3>PG County Farmer's Markets</h3>
+        <ol class="box" id = "farmers_markets">
+          A list of local farmer's markets
+        </ol>
+        <div class="chart_container">
+          <canvas id="myChart"></canvas>
+        </div>        
         <div class="lds-ellipsis" id="data_load_animation"><div></div><div></div><div></div><div></div>
       </div>
     </div>
@@ -48,4 +54,5 @@
     </p>
   </footer>
   <script src="./script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </html>
