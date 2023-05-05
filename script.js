@@ -14,7 +14,7 @@ function injectHTML(list) {
   });
 }
 
-function initChart(chart, chartData) {
+function initChart(chart, chartLabels, chartDatapoints) {
   const data = {
     labels: labels,
     datasets: [
@@ -22,7 +22,7 @@ function initChart(chart, chartData) {
         label: "My First dataset",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
-        data: chartData,
+        data: chartDatapoints,
       },
     ],
   };
@@ -48,8 +48,11 @@ function getChartData(arr, labels) {
     }
   }
   entries.pop();
-  const to_map = new Map([[keys],[entries]]);
-  const data = Object.fromEntries(to_map);
+  const data = {};
+  keys.forEach((element, index) => {
+    data[element] = entries[index];
+  })
+
   console.log(data);
   return data;
 }
@@ -99,8 +102,8 @@ async function mainEvent() {
     "wine"
   ];
   chartLabels = labels;
-  getChartData(chartData, labels);
-  initChart(chartTarget, chartLabels);
+  chartDatapoints = getChartData(chartData, labels);
+  initChart(chartTarget, chartLabels, chartDatapoints);
 
   /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
   loadDataButton.addEventListener("click", async (submitEvent) => {
