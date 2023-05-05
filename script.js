@@ -19,7 +19,7 @@ function initChart(chart, chartLabels, chartDatapoints) {
     labels: labels,
     datasets: [
       {
-        label: "My First dataset",
+        label: "Number of Farmer's Markets sell goods",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
         data: chartDatapoints,
