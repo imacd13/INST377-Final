@@ -6,6 +6,7 @@
 function injectHTML(list) {
   console.log("fired injectHTML");
   const target = document.querySelector("#farmers_markets");
+  console.log(typeof(target));
   target.innerHTML = "";
   list.forEach((item, index) => {
     /* string that supplies us restaurant name */
@@ -14,8 +15,7 @@ function injectHTML(list) {
   });
 }
 
-function initChart(chart) {
-  const labels = ["January", "February", "March", "April", "May", "June"];
+function initChart(chart, labels) {
 
   const data = {
     labels: labels,
@@ -30,7 +30,7 @@ function initChart(chart) {
   };
 
   const config = {
-    type: "line",
+    type: "bar",
     data: data,
     options: {},
   };
@@ -39,6 +39,33 @@ function initChart(chart) {
     chart,
     config
   );
+}
+
+function getLabels(arr, label) {
+    // this function takes an array that contains the labels and a column/value to use as the label data
+    const label_list = Object.keys(arr[0]);
+    console.log(label_list[1]);
+    const index = 0;
+
+    to_keep = ['bakedgoods', 'cheese', 'crafts', 'flowers', 'eggs', 'seafood', 'herbs', 'vegetables', 'honey', 'jams', 'maple', 'meat', 'nursery', 'nuts', 'plants', 'poultry', 'prepared', 'soap', 'trees', 'wine'];
+
+    // for (i = 0; i < label_list.length; i++) {
+    //     for (j = 0; j < to_keep.length, j++) {
+    //         if (label_list[i])
+    //     }
+    // }
+
+    // for (let i = 0; i < arr.length; i++) {
+    //     // add the labels to the label list
+    //     console.log(label_list[i] = Object.keys(arr[i]));
+    //     console.log(typeof(label_list));
+    // }
+    // // return it!!
+    return label_list;
+}
+
+function chartData(array) {
+
 }
 
 async function mainEvent() {
@@ -58,7 +85,12 @@ async function mainEvent() {
     generateListButton.classList.remove("hidden");
   }
 
-  initChart(chartTarget);
+  const chartData = parsedData;
+  for (let i = 0; i < chartData.length; i++) {
+    
+  }
+  chartLabels = getLabels(parsedData, "market_name");
+  initChart(chartTarget, chartLabels);
 
   /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
   loadDataButton.addEventListener("click", async (submitEvent) => {
@@ -82,6 +114,8 @@ async function mainEvent() {
     console.log(storedList);
     localStorage.setItem("storedData", JSON.stringify(storedList));
     parsedData = storedList;
+
+    const chartData = parsedData;
 
     if (storedList?.length > 0) {
       generateListButton.classList.remove("hidden");
