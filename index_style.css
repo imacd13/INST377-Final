@@ -341,7 +341,7 @@
   
   .prev:focus,
   .next:focus {
-    olor: #d991ba;
+    color: #d991ba;
     margin: 0;
     /* Pick a good border colour and check out how it works with your buttons */
   }
