@@ -15,8 +15,27 @@ function injectHTML(list) {
   });
 }
 
-function initChart(chart, labels) {
-
+function initChart(chart) {
+  labels = ['bakedgoods', 
+            'cheese', 
+            'crafts', 
+            'flowers', 
+            'eggs', 
+            'seafood', 
+            'herbs', 
+            'vegetables', 
+            'honey', 
+            'jams', 
+            'maple', 
+            'meat', 
+            'nursery', 
+            'nuts', 
+            'plants', 
+            'poultry', 
+            'prepared', 
+            'soap', 
+            'trees', 
+            'wine'];
   const data = {
     labels: labels,
     datasets: [
@@ -39,29 +58,6 @@ function initChart(chart, labels) {
     chart,
     config
   );
-}
-
-function getLabels(arr, label) {
-    // this function takes an array that contains the labels and a column/value to use as the label data
-    const label_list = Object.keys(arr[0]);
-    console.log(label_list[1]);
-    const index = 0;
-
-    to_keep = ['bakedgoods', 'cheese', 'crafts', 'flowers', 'eggs', 'seafood', 'herbs', 'vegetables', 'honey', 'jams', 'maple', 'meat', 'nursery', 'nuts', 'plants', 'poultry', 'prepared', 'soap', 'trees', 'wine'];
-
-    // for (i = 0; i < label_list.length; i++) {
-    //     for (j = 0; j < to_keep.length, j++) {
-    //         if (label_list[i])
-    //     }
-    // }
-
-    // for (let i = 0; i < arr.length; i++) {
-    //     // add the labels to the label list
-    //     console.log(label_list[i] = Object.keys(arr[i]));
-    //     console.log(typeof(label_list));
-    // }
-    // // return it!!
-    return label_list;
 }
 
 function chartData(array) {
