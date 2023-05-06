@@ -14,12 +14,26 @@ function injectHTML(list) {
   });
 }
 
+/* A quick filter that will return something based on a matching input */
+function filterList(list, query) {
+  return list.filter((item) => {
+    const lowerCaseName = item.market_name.toLowerCase();
+    const lowerCaseQuery = query.toLowerCase();
+    return lowerCaseName.includes(lowerCaseQuery);
+  });
+  /*
+      Using the .filter array method, 
+      return a list that is filtered by comparing the item name in lower case
+      to the query in lower case
+      Ask the TAs if you need help with this
+    */
+}
+
 function initChart(chart, chartLabels, chartDatapoints) {
   const data = {
     labels: labels,
     datasets: [
       {
-        label: "Totals of types of goods sold by PG Farmer's Markets",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
         data: chartDatapoints,
@@ -32,11 +46,12 @@ function initChart(chart, chartLabels, chartDatapoints) {
     data: data,
     options: {},
   };
-
-  return new Chart(chart, config);
+  barChart = new Chart(chart, config);
+  return barChart;
 }
 
 function getChartData(arr, labels) {
+  console.log(arr);
   keys = labels;
   entries = new Array(keys.length).fill(0);
   for (i = 0; i < arr.length; i++) {
@@ -52,29 +67,34 @@ function getChartData(arr, labels) {
     data[element] = entries[index];
   });
 
+  console.log(data);
   return data;
 }
 
 async function mainEvent() {
+  // the async keyword means we can make API requests
   const loadDataButton = document.querySelector("#data_load");
   const clearDataButton = document.querySelector("#data_clear");
   const generateListButton = document.querySelector("#generate");
-  const generateChartButton = document.querySelector("#generate_chart");
-  const textField = document.querySelector("#markets");
   const chartTarget = document.querySelector("#myChart");
+  const textField = document.querySelector("#markets");
+  // Add a querySelector that targets your filter button here
+
+  const loadAnimation = document.querySelector("#data_load_animation");
+  loadAnimation.style.display = "none";
+  generateListButton.classList.add("hidden");
 
   const storedData = localStorage.getItem("storedData");
   let parsedData = JSON.parse(storedData);
+  if (parsedData?.length > 0) {
+    generateListButton.classList.remove("hidden");
+  }
 
-  const chartData = parsedData;
-  console.log(chartData);
+  let currentList = []; // this is "scoped" to the main event function
 
   /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
   loadDataButton.addEventListener("click", async (submitEvent) => {
     // async has to be declared on every function that needs to "await" something
-
-    // This prevents your page from becoming a list of 1000 records from the county, even if your form still has an action set on it
-    submitEvent.preventDefault();
 
     // this is substituting for a "breakpoint" - it prints to the browser to tell us we successfully submitted the form
     console.log("form submission");
@@ -88,24 +108,22 @@ async function mainEvent() {
 
     // This changes the response from the GET into data we can use - an "object"
     const storedList = await results.json();
-    console.log(storedList);
     localStorage.setItem("storedData", JSON.stringify(storedList));
     parsedData = storedList;
 
-    const chartData = parsedData;
+    if (storedList?.length > 0) {
+      generateListButton.classList.remove("hidden");
+    }
 
     loadAnimation.style.display = "none";
     console.table(storedList);
     injectHTML(storedList);
-  });
 
-  generateListButton.addEventListener("click", (event) => {
+    const chartData = parsedData;
 
-  });
-
-  generateChartButton.addEventListener("click", (event) => {
     // tried to make a function to automate the creation of these labels, but I realized thatit was useless as if
     // I am handpicking which lables I want anyway, it's a waste of time and doesn't make sense.
+
     labels = [
       "bakedgoods",
       "cheese",
@@ -133,25 +151,30 @@ async function mainEvent() {
     initChart(chartTarget, chartLabels, chartDatapoints);
   });
 
+  generateListButton.addEventListener("click", (event) => {
+    console.log("generate new list");
+    console.log(parsedData);
+    currentList = parsedData;
+    console.log(currentList);
+    injectHTML(currentList);
+  });
+
   textField.addEventListener("input", (event) => {
     console.log("input", event.target.value);
-    // const newList = filterList(currentList, event.target.value);
-    // console.log(newList);
-    // injectHTML(newList);
-  });  
+    currentList = parsedData;
+    const newList = filterList(currentList, event.target.value);
+    console.log(newList);
+    barChart.destroy();
+    chartDatapoints = getChartData(newList, labels);
+    initChart(chartTarget, chartLabels, chartDatapoints);
+    injectHTML(newList);
+  });
 
-  //   generateListButton.addEventListener("click", (event) => {
-  //     console.log("generate new list");
-  //     currentList = cutRestaurantList(parsedData);
-  //     console.log(currentList);
-  //     injectHTML(currentList);
-  //   });
-
-  // clearDataButton.addEventListener("click", (event) => {
-  //   console.log('clear browser data');
-  //   localStorage.clear();
-  //   console.log('localStorage Check', localStorage.getItem("storedData"))
-  // })
+  clearDataButton.addEventListener("click", (event) => {
+    console.log("clear browser data");
+    localStorage.clear();
+    console.log("localStorage Check", localStorage.getItem("storedData"));
+  });
 }
 
 /*
