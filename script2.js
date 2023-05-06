@@ -16,19 +16,19 @@
   }
   
   /* A quick filter that will return something based on a matching input */
-//   function filterList(list, query) {
-//     return list.filter((item) => {
-//       const lowerCaseName = item.name.toLowerCase();
-//       const lowerCaseQuery = query.toLowerCase();
-//       return lowerCaseName.includes(lowerCaseQuery);
-//     });
-//     /*
-//       Using the .filter array method, 
-//       return a list that is filtered by comparing the item name in lower case
-//       to the query in lower case
-//       Ask the TAs if you need help with this
-//     */
-//   }
+  function filterList(list, query) {
+    return list.filter((item) => {
+      const lowerCaseName = item.market_name.toLowerCase();
+      const lowerCaseQuery = query.toLowerCase();
+      return lowerCaseName.includes(lowerCaseQuery);
+    });
+    /*
+      Using the .filter array method, 
+      return a list that is filtered by comparing the item name in lower case
+      to the query in lower case
+      Ask the TAs if you need help with this
+    */
+  }
 
 function initChart(chart, chartLabels, chartDatapoints) {
     const data = {
@@ -75,7 +75,6 @@ function initChart(chart, chartLabels, chartDatapoints) {
 
   async function mainEvent() {
     // the async keyword means we can make API requests
-    const mainForm = document.querySelector(".main_form"); // This class name needs to be set on your form before you can listen for an event on it
     const loadDataButton = document.querySelector("#data_load");
     const clearDataButton = document.querySelector("#data_clear");
     const generateListButton = document.querySelector("#generate");
@@ -131,17 +130,19 @@ function initChart(chart, chartLabels, chartDatapoints) {
   
     generateListButton.addEventListener("click", (event) => {
       console.log("generate new list");
+      console.log(parsedData);
       currentList = parsedData;
       console.log(currentList);
       injectHTML(currentList);
     });
   
-    // textField.addEventListener("input", (event) => {
-    //   console.log("input", event.target.value);
-    //   const newList = filterList(currentList, event.target.value);
-    //   console.log(newList);
-    //   injectHTML(newList);
-    // });
+    textField.addEventListener("input", (event) => {
+      console.log("input", event.target.value);
+      currentList = parsedData;
+      const newList = filterList(currentList, event.target.value);
+      console.log(newList);
+      injectHTML(newList);
+    });
   
     clearDataButton.addEventListener("click", (event) => {
       console.log('clear browser data');
