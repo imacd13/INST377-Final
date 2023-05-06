@@ -81,7 +81,7 @@ function initChart(chart, chartLabels, chartDatapoints) {
     const generateListButton = document.querySelector("#generate");
     const generateChartButton = document.querySelector("#generate_chart");
     const chartTarget = document.querySelector("#myChart");
-    const textField = document.querySelector("#resto");
+    const textField = document.querySelector("#markets");
     // Add a querySelector that targets your filter button here
   
     const loadAnimation = document.querySelector("#data_load_animation");
@@ -126,42 +126,7 @@ function initChart(chart, chartLabels, chartDatapoints) {
   
       loadAnimation.style.display = "none";
       console.table(storedList);
-      injectHTML(storedList);
-
-       // // 
-    // // 
-    // // 
-    // //
-    
-    //    submitEvent.preventDefault();
-
-    // // this is substituting for a "breakpoint" - it prints to the browser to tell us we successfully submitted the form
-    // console.log("form submission");
-    // console.log("Loading data");
-    // loadAnimation.style.display = "inline-block";
-
-    // // Basic GET request - this replaces the form Action
-    // const results = await fetch(
-    //   "https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
-    // );
-
-    // // This changes the response from the GET into data we can use - an "object"
-    // const storedList = await results.json();
-    // console.log(storedList);
-    // localStorage.setItem("storedData", JSON.stringify(storedList));
-    // parsedData = storedList;
-
-    // const chartData = parsedData;
-
-    // if (storedList?.length > 0) {
-    //   generateListButton.classList.remove("hidden");
-    // }
-
-    // loadAnimation.style.display = "none";
-    // console.table(storedList);
-    // injectHTML(storedList);
-
-   
+      injectHTML(storedList);   
     });
   
     generateListButton.addEventListener("click", (event) => {
