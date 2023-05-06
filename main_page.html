@@ -1,49 +1,53 @@
+<!--
+    This is how to build the CSS-only load animation from loading.io    
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    This is helpful for showing your client-side users when data is loading,
+    since there's otherwise no sign your app is thinking about something!
+    Try placing it at the same level in your element tree as your Submit button
+-->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Isabella Macdonald 377 Final</title>
+
     <link rel="stylesheet" href="main_page_style.css" />
   </head>
-  <body>
-    
 
   <div class="wrapper">
-    <header>
+    <header class="header">
       <h1>Prince George's County Farmer's Markets -- Main Page</h1>
     </header>
     <div class="container">
       <div class="left_section">
         <h3>Form Inputs</h3>
-        <form action="https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"></form>
+        <form
+          action="https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
+          class="box main_form"
+        >
           <div class="buttons">
-            <button type="button" id="generate_chart">Generate Chart</button>
-            <br>
+            <button type="button" id="data_load">Load Farmer's Market Data</button>
+            <button type="button" id="data_clear">Clear Farmer's Market Data</button>
+            <label for="markets">Farmer's Market Name</label>
+            <input type="text" id="markets" name="markets"/>
           </div>
           <div class="buttons">
-            <button type="button" id="filter_button">Filter Data</button>
-            <input type="text" id="markets" name="markets">
-            <br>
-            <button type="button" id="generate">Load Farmer's Markets list</button>
+            <button type="button" id="generate">Generate List</button>
           </div>
         </form>
       </div>
       <div class="right_section box">
-        <h3>PG County Farmer's Markets</h3>
-        <div class="chart_container">
+        <div>
           <canvas id="myChart"></canvas>
-        </div>        
+        </div>
+        <h3>Local Restaurants</h3>
         <ol class="box" id = "farmers_markets">
-          A list of local farmer's markets-- click 'Load Farmer's Markets list'
+            A list of PG County Farmer's Markets
         </ol>
+        <div class="lds-ellipsis" id="data_load_animation"><div></div><div></div><div></div><div></div>
       </div>
     </div>
-  </div>
-  <div class="button_box">
-    <a href="index.html">
-      <button type="button">Take Me Back...</button>
-    </a>
   </div>
   <footer class="footer">
     <p>
