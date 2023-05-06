@@ -63,69 +63,31 @@ function filterList(list, query) {
     const lowerCaseQuery = query.toLowerCase();
     return lowerCaseName.includes(lowerCaseQuery);
   });
-  /*
-      Using the .filter array method, 
-      return a list that is filtered by comparing the item name in lower case
-      to the query in lower case
-      Ask the TAs if you need help with this
-    */
 }
 
 async function mainEvent() {
-  const loadDataButton = document.querySelector("#data_load");
+  const generateListButton = document.querySelector("#data_load");
   const clearDataButton = document.querySelector("#data_clear");
-  const generateListButton = document.querySelector("#generate");
+  const generateChartButton = document.querySelector("#generate");
   const textField = document.querySelector("#markets");
   const chartTarget = document.querySelector("#myChart");
 
   const loadAnimation = document.querySelector("#data_load_animation");
-  loadAnimation.style.display = "none";
-  generateListButton.classList.add("hidden");
+  generateChartButton.classList.add("hidden");
 
   const storedData = localStorage.getItem("storedData");
   let parsedData = JSON.parse(storedData);
   if (parsedData?.length > 0) {
-    generateListButton.classList.remove("hidden");
+    generateChartButton.classList.remove("hidden");
   }
 
   const chartData = parsedData;
+
+  let currentList = [];
+
   console.log(chartData);
 
-  /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
-  loadDataButton.addEventListener("click", async (submitEvent) => {
-    // async has to be declared on every function that needs to "await" something
-
-    // This prevents your page from becoming a list of 1000 records from the county, even if your form still has an action set on it
-    submitEvent.preventDefault();
-
-    // this is substituting for a "breakpoint" - it prints to the browser to tell us we successfully submitted the form
-    console.log("form submission");
-    console.log("Loading data");
-    loadAnimation.style.display = "inline-block";
-
-    // Basic GET request - this replaces the form Action
-    const results = await fetch(
-      "https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
-    );
-
-    // This changes the response from the GET into data we can use - an "object"
-    const storedList = await results.json();
-    console.log(storedList);
-    localStorage.setItem("storedData", JSON.stringify(storedList));
-    parsedData = storedList;
-
-    const chartData = parsedData;
-
-    if (storedList?.length > 0) {
-      generateListButton.classList.remove("hidden");
-    }
-
-    loadAnimation.style.display = "none";
-    console.table(storedList);
-    injectHTML(storedList);
-  });
-
-  generateListButton.addEventListener("click", (event) => {
+  generateChartButton.addEventListener("click", (event) => {
     // tried to make a function to automate the creation of these labels, but I realized thatit was useless as if
     // I am handpicking which lables I want anyway, it's a waste of time and doesn't make sense.
     labels = [
@@ -153,6 +115,31 @@ async function mainEvent() {
     chartLabels = labels;
     chartDatapoints = getChartData(chartData, labels);
     initChart(chartTarget, chartLabels, chartDatapoints);
+  });
+
+  /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
+  generateListButton.addEventListener("click", async (submitEvent) => {
+    // this is substituting for a "breakpoint" - it prints to the browser to tell us we successfully submitted the form
+    console.log("form submission");
+    console.log("Loading data");
+
+    // Basic GET request - this replaces the form Action
+    const results = await fetch(
+      "https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
+    );
+
+    // This changes the response from the GET into data we can use - an "object"
+    const storedList = await results.json();
+    console.log(storedList);
+    localStorage.setItem("storedData", JSON.stringify(storedList));
+    parsedData = storedList;
+    currentList = parsedData;
+
+    if (currentList?.length > 0) {
+      generateChartButton.classList.remove("hidden");
+    }
+    console.table(currentList);
+    injectHTML(currentList);
   });
 
   textField.addEventListener("input", (event) => {
