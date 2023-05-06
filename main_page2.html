@@ -1,0 +1,71 @@
+<!--
+    This is how to build the CSS-only load animation from loading.io    
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    This is helpful for showing your client-side users when data is loading,
+    since there's otherwise no sign your app is thinking about something!
+    Try placing it at the same level in your element tree as your Submit button
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Isabella's Labs for INST377</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""/>
+
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""></script>
+
+    <link rel="stylesheet" href="main_page_style2.css" />
+  </head>
+
+  <div class="wrapper">
+    <header class="header">
+      <h1>Isabella INST377 Labs</h1>
+    </header>
+    <div class="container">
+      <div class="left_section">
+        <h3>Form Inputs</h3>
+        <form
+          action="https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json"
+          class="box main_form"
+        >
+          <div class="buttons">
+            <button type="button" id="data_load">Load Farmer's Market Data</button>
+            <button type="button" id="data_clear">Clear Farmer's Market Data</button>
+            <label for="resto">Restaurant Name</label>
+            <input type="text" id="resto" name="resto"/>
+          </div>
+          <div class="buttons">
+            <button type="button" id="generate">Generate List</button>
+          </div>
+        </form>
+      </div>
+      <div class="right_section box">
+        <h3>Local Restaurants</h3>
+        <div id="map" class="box"></div>
+        <ol class="box" id = "restaurant_list">
+            A list of local restaurants
+        </ol>
+        <div class="lds-ellipsis" id="data_load_animation"><div></div><div></div><div></div><div></div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>
+      Isabella Macdonald GitHub:
+      <a
+        href="https://github.com/imacd13"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub</a
+      >
+    </p>
+  </footer>
+  <script src="./script2.js"></script>
+</html>
