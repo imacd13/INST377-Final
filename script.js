@@ -19,7 +19,7 @@ function initChart(chart, chartLabels, chartDatapoints) {
     labels: labels,
     datasets: [
       {
-        label: "Totals of types of goods sold by PG Farmer's Markets",
+        label: "Number of PG Farmer's Markets that sell each type of good",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
         data: chartDatapoints,
@@ -37,31 +37,45 @@ function initChart(chart, chartLabels, chartDatapoints) {
 }
 
 function getChartData(arr, labels) {
-    console.log(arr);
-    keys = labels;
-    entries = new Array(keys.length).fill(0);
+  console.log(arr);
+  keys = labels;
+  entries = new Array(keys.length).fill(0);
   for (i = 0; i < arr.length; i++) {
     for (j = 0; j < keys.length; j++) {
-        if (arr[i][keys[j]] == 'Yes') {
-            entries[i]++ ;
-        }
+      if (arr[i][keys[j]] == "Yes") {
+        entries[i]++;
+      }
     }
   }
   entries.pop();
   const data = {};
   keys.forEach((element, index) => {
     data[element] = entries[index];
-  })
+  });
 
   console.log(data);
   return data;
+}
+
+function filterList(list, query) {
+  return list.filter((item) => {
+    const lowerCaseName = item.name.toLowerCase();
+    const lowerCaseQuery = query.toLowerCase();
+    return lowerCaseName.includes(lowerCaseQuery);
+  });
+  /*
+      Using the .filter array method, 
+      return a list that is filtered by comparing the item name in lower case
+      to the query in lower case
+      Ask the TAs if you need help with this
+    */
 }
 
 async function mainEvent() {
   const loadDataButton = document.querySelector("#data_load");
   const clearDataButton = document.querySelector("#data_clear");
   const generateListButton = document.querySelector("#generate");
-  const textField = document.querySelector("#resto");
+  const textField = document.querySelector("#markets");
   const chartTarget = document.querySelector("#myChart");
 
   const loadAnimation = document.querySelector("#data_load_animation");
@@ -76,34 +90,6 @@ async function mainEvent() {
 
   const chartData = parsedData;
   console.log(chartData);
-
-  // tried to make a function to automate the creation of these labels, but I realized thatit was useless as if
-  // I am handpicking which lables I want anyway, it's a waste of time and doesn't make sense.
-  labels = [
-    "bakedgoods",
-    "cheese",
-    "crafts",
-    "flowers",
-    "eggs",
-    "seafood",
-    "herbs",
-    "vegetables",
-    "honey",
-    "jams",
-    "maple",
-    "meat",
-    "nursery",
-    "nuts",
-    "plants",
-    "poultry",
-    "prepared",
-    "soap",
-    "trees",
-    "wine"
-  ];
-  chartLabels = labels;
-  chartDatapoints = getChartData(chartData, labels);
-  initChart(chartTarget, chartLabels, chartDatapoints);
 
   /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
   loadDataButton.addEventListener("click", async (submitEvent) => {
@@ -139,19 +125,42 @@ async function mainEvent() {
     injectHTML(storedList);
   });
 
-  //   generateListButton.addEventListener("click", (event) => {
-  //     console.log("generate new list");
-  //     currentList = cutRestaurantList(parsedData);
-  //     console.log(currentList);
-  //     injectHTML(currentList);
-  //   });
+  generateListButton.addEventListener("click", (event) => {
+    // tried to make a function to automate the creation of these labels, but I realized thatit was useless as if
+    // I am handpicking which lables I want anyway, it's a waste of time and doesn't make sense.
+    labels = [
+      "bakedgoods",
+      "cheese",
+      "crafts",
+      "flowers",
+      "eggs",
+      "seafood",
+      "herbs",
+      "vegetables",
+      "honey",
+      "jams",
+      "maple",
+      "meat",
+      "nursery",
+      "nuts",
+      "plants",
+      "poultry",
+      "prepared",
+      "soap",
+      "trees",
+      "wine",
+    ];
+    chartLabels = labels;
+    chartDatapoints = getChartData(chartData, labels);
+    initChart(chartTarget, chartLabels, chartDatapoints);
+  });
 
-  // textField.addEventListener("input", (event) => {
-  //   console.log("input", event.target.value);
-  //   const newList = filterList(currentList, event.target.value);
-  //   console.log(newList);
-  //   injectHTML(newList);
-  // });
+  textField.addEventListener("input", (event) => {
+    console.log("input", event.target.value);
+    const newList = filterList(currentList, event.target.value);
+    console.log(newList);
+    injectHTML(newList);
+  });
 
   // clearDataButton.addEventListener("click", (event) => {
   //   console.log('clear browser data');

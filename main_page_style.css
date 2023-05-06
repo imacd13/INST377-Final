@@ -413,6 +413,11 @@ form button {
   height: 100%;
 }
 
+.buttons {
+    display: flex;
+    flex-direction: column;
+}
+
 /* How To Write A Media Query For Small Screens */
 
 @media only screen and (max-width: 736px) {

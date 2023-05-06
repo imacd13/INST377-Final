@@ -17,23 +17,26 @@
       <div class="left_section">
         <h3>Form Inputs</h3>
         <form action="https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"></form>
-      <div class="buttons">
-        <button type="button" id="data_load">Load Data</button>
-      </div>
           <div class="buttons">
             <button type="button" id="generate">Generate Chart</button>
+            <br>
+          </div>
+          <div class="buttons">
+            <button type="button" id="filter_button">Filter Data</button>
+            <input type="text" id="markets" name="markets">
+            <br>
+            <button type="button" id="data_load">Load Farmer's Markets list</button>
           </div>
         </form>
       </div>
       <div class="right_section box">
         <h3>PG County Farmer's Markets</h3>
-        <ol class="box" id = "farmers_markets">
-          A list of local farmer's markets
-        </ol>
         <div class="chart_container">
           <canvas id="myChart"></canvas>
         </div>        
-        <div class="lds-ellipsis" id="data_load_animation"><div></div><div></div><div></div><div></div>
+        <ol class="box" id = "farmers_markets">
+          A list of local farmer's markets-- click 'Load Farmer's Markets list'
+        </ol>
       </div>
     </div>
   </div>
