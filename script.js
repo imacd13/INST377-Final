@@ -19,7 +19,7 @@ function initChart(chart, chartLabels, chartDatapoints) {
     labels: labels,
     datasets: [
       {
-        label: "Number of PG Farmer's Markets that sell each type of good",
+        label: "Totals of types of goods sold by PG Farmer's Markets",
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgb(255, 99, 132)",
         data: chartDatapoints,
@@ -57,35 +57,49 @@ function getChartData(arr, labels) {
   return data;
 }
 
-function filterList(list, query) {
-  return list.filter((item) => {
-    const lowerCaseName = item.name.toLowerCase();
-    const lowerCaseQuery = query.toLowerCase();
-    return lowerCaseName.includes(lowerCaseQuery);
-  });
-}
-
 async function mainEvent() {
-  const generateListButton = document.querySelector("#data_load");
+  const loadDataButton = document.querySelector("#data_load");
   const clearDataButton = document.querySelector("#data_clear");
-  const generateChartButton = document.querySelector("#generate");
-  const textField = document.querySelector("#markets");
+  const generateListButton = document.querySelector("#generate");
+  const generateChartButton = document.querySelector("#generate_chart");
+  const textField = document.querySelector("#resto");
   const chartTarget = document.querySelector("#myChart");
-
-  const loadAnimation = document.querySelector("#data_load_animation");
-  generateChartButton.classList.add("hidden");
 
   const storedData = localStorage.getItem("storedData");
   let parsedData = JSON.parse(storedData);
-  if (parsedData?.length > 0) {
-    generateChartButton.classList.remove("hidden");
-  }
 
   const chartData = parsedData;
-
-  let currentList = [];
-
   console.log(chartData);
+
+  /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
+  loadDataButton.addEventListener("click", async (submitEvent) => {
+    // async has to be declared on every function that needs to "await" something
+
+    // This prevents your page from becoming a list of 1000 records from the county, even if your form still has an action set on it
+    submitEvent.preventDefault();
+
+    // this is substituting for a "breakpoint" - it prints to the browser to tell us we successfully submitted the form
+    console.log("form submission");
+    console.log("Loading data");
+    loadAnimation.style.display = "inline-block";
+
+    // Basic GET request - this replaces the form Action
+    const results = await fetch(
+      "https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
+    );
+
+    // This changes the response from the GET into data we can use - an "object"
+    const storedList = await results.json();
+    console.log(storedList);
+    localStorage.setItem("storedData", JSON.stringify(storedList));
+    parsedData = storedList;
+
+    const chartData = parsedData;
+
+    loadAnimation.style.display = "none";
+    console.table(storedList);
+    injectHTML(storedList);
+  });
 
   generateChartButton.addEventListener("click", (event) => {
     // tried to make a function to automate the creation of these labels, but I realized thatit was useless as if
@@ -117,37 +131,19 @@ async function mainEvent() {
     initChart(chartTarget, chartLabels, chartDatapoints);
   });
 
-  /* We need to listen to an "event" to have something happen in our page - here we're listening for a "submit" */
-  generateListButton.addEventListener("click", async (submitEvent) => {
-    // this is substituting for a "breakpoint" - it prints to the browser to tell us we successfully submitted the form
-    console.log("form submission");
-    console.log("Loading data");
+  //   generateListButton.addEventListener("click", (event) => {
+  //     console.log("generate new list");
+  //     currentList = cutRestaurantList(parsedData);
+  //     console.log(currentList);
+  //     injectHTML(currentList);
+  //   });
 
-    // Basic GET request - this replaces the form Action
-    const results = await fetch(
-      "https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
-    );
-
-    // This changes the response from the GET into data we can use - an "object"
-    const storedList = await results.json();
-    console.log(storedList);
-    localStorage.setItem("storedData", JSON.stringify(storedList));
-    parsedData = storedList;
-    currentList = parsedData;
-
-    if (currentList?.length > 0) {
-      generateChartButton.classList.remove("hidden");
-    }
-    console.table(currentList);
-    injectHTML(currentList);
-  });
-
-  textField.addEventListener("input", (event) => {
-    console.log("input", event.target.value);
-    const newList = filterList(currentList, event.target.value);
-    console.log(newList);
-    injectHTML(newList);
-  });
+  // textField.addEventListener("input", (event) => {
+  //   console.log("input", event.target.value);
+  //   const newList = filterList(currentList, event.target.value);
+  //   console.log(newList);
+  //   injectHTML(newList);
+  // });
 
   // clearDataButton.addEventListener("click", (event) => {
   //   console.log('clear browser data');
