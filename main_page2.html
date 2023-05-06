@@ -12,15 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Isabella's Labs for INST377</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-    crossorigin=""/>
-
-     <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-    crossorigin=""></script>
-
     <link rel="stylesheet" href="main_page_style2.css" />
   </head>
 
@@ -32,12 +23,13 @@
       <div class="left_section">
         <h3>Form Inputs</h3>
         <form
-          action="https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json"
+          action="https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
           class="box main_form"
         >
           <div class="buttons">
             <button type="button" id="data_load">Load Farmer's Market Data</button>
             <button type="button" id="data_clear">Clear Farmer's Market Data</button>
+            <button type="button" id="generate_chart">Generate Chart</button>
             <label for="resto">Restaurant Name</label>
             <input type="text" id="resto" name="resto"/>
           </div>
@@ -47,10 +39,12 @@
         </form>
       </div>
       <div class="right_section box">
+        <div>
+          <canvas id="myChart"></canvas>
+        </div>
         <h3>Local Restaurants</h3>
-        <div id="map" class="box"></div>
-        <ol class="box" id = "restaurant_list">
-            A list of local restaurants
+        <ol class="box" id = "farmers_markets">
+            A list of PG County Farmer's Markets
         </ol>
         <div class="lds-ellipsis" id="data_load_animation"><div></div><div></div><div></div><div></div>
       </div>
@@ -68,4 +62,5 @@
     </p>
   </footer>
   <script src="./script2.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </html>

@@ -3,78 +3,84 @@
   by adding `<script src="script.js">` just before your closing `</body>` tag
 */
 
-function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
-  }
   
   function injectHTML(list) {
     console.log("fired injectHTML");
-    const target = document.querySelector("#restaurant_list");
+    const target = document.querySelector("#farmers_markets");
     target.innerHTML = "";
     list.forEach((item, index) => {
       /* string that supplies us restaurant name */
-      const str = `<li>${item.name}</li>`;
+      const str = `<li>${item.market_name}</li>`;
       target.innerHTML += str;
     });
   }
   
   /* A quick filter that will return something based on a matching input */
-  function filterList(list, query) {
-    return list.filter((item) => {
-      const lowerCaseName = item.name.toLowerCase();
-      const lowerCaseQuery = query.toLowerCase();
-      return lowerCaseName.includes(lowerCaseQuery);
-    });
-    /*
-      Using the .filter array method, 
-      return a list that is filtered by comparing the item name in lower case
-      to the query in lower case
-      Ask the TAs if you need help with this
-    */
+//   function filterList(list, query) {
+//     return list.filter((item) => {
+//       const lowerCaseName = item.name.toLowerCase();
+//       const lowerCaseQuery = query.toLowerCase();
+//       return lowerCaseName.includes(lowerCaseQuery);
+//     });
+//     /*
+//       Using the .filter array method, 
+//       return a list that is filtered by comparing the item name in lower case
+//       to the query in lower case
+//       Ask the TAs if you need help with this
+//     */
+//   }
+
+function initChart(chart, chartLabels, chartDatapoints) {
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          label: "Totals of types of goods sold by PG Farmer's Markets",
+          backgroundColor: "rgb(255, 99, 132)",
+          borderColor: "rgb(255, 99, 132)",
+          data: chartDatapoints,
+        },
+      ],
+    };
+  
+    const config = {
+      type: "bar",
+      data: data,
+      options: {},
+    };
+  
+    return new Chart(chart, config);
   }
-  function cutRestaurantList(list) {
-    console.log("fired cut list");
-    const range = [...Array(15).keys()];
   
-    return (newArray = range.map((item, index) => {
-      const idx = getRandomIntInclusive(0, list.length - 1);
-      return list[idx];
-    }));
-  }
-  
-  function initMap(){
-    const carto = L.map('map').setView([38.98, -76.93], 13);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(carto);
-    return carto;
-  }
-  
-  function markerPlace(array, map) {
-    console.log('array for markers', array);
-  
-    map.eachLayer((layer) => {
-      if (layer instanceof L.Marker) {
-        layer.remove();
+  function getChartData(arr, labels) {
+      console.log(arr);
+      keys = labels;
+      entries = new Array(keys.length).fill(0);
+    for (i = 0; i < arr.length; i++) {
+      for (j = 0; j < keys.length; j++) {
+          if (arr[i][keys[j]] == 'Yes') {
+              entries[i]++ ;
+          }
       }
-    });
-  
-    array.forEach((item) => {
-      console.log('markerPlace', item);
-      const {coordinates} = item.geocoded_column_1;
-      L.marker([coordinates[1], coordinates[0]]).addTo(map);
+    }
+    entries.pop();
+    const data = {};
+    keys.forEach((element, index) => {
+      data[element] = entries[index];
     })
-  }
   
+    console.log(data);
+    return data;
+  }
+
   async function mainEvent() {
     // the async keyword means we can make API requests
     const mainForm = document.querySelector(".main_form"); // This class name needs to be set on your form before you can listen for an event on it
     const loadDataButton = document.querySelector("#data_load");
     const clearDataButton = document.querySelector("#data_clear");
     const generateListButton = document.querySelector("#generate");
+    const generateChartButton = document.querySelector("#generate_chart");
+    const chartTarget = document.querySelector("#myChart");
     const textField = document.querySelector("#resto");
     // Add a querySelector that targets your filter button here
   
@@ -82,13 +88,13 @@ function getRandomIntInclusive(min, max) {
     loadAnimation.style.display = "none";
     generateListButton.classList.add("hidden");
   
-    const carto = initMap();
-  
     const storedData = localStorage.getItem('storedData');
     let parsedData = JSON.parse(storedData);
     if (parsedData?.length > 0) {
       generateListButton.classList.remove("hidden");
     };
+
+    const chartData = parsedData;
   
     let currentList = []; // this is "scoped" to the main event function
   
@@ -106,7 +112,7 @@ function getRandomIntInclusive(min, max) {
   
       // Basic GET request - this replaces the form Action
       const results = await fetch(
-        "https://data.princegeorgescountymd.gov/resource/umjn-t2iz.json"
+        "https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
       );
   
       // This changes the response from the GET into data we can use - an "object"
@@ -121,29 +127,92 @@ function getRandomIntInclusive(min, max) {
       loadAnimation.style.display = "none";
       console.table(storedList);
       injectHTML(storedList);
+
+       // // 
+    // // 
+    // // 
+    // //
+    
+    //    submitEvent.preventDefault();
+
+    // // this is substituting for a "breakpoint" - it prints to the browser to tell us we successfully submitted the form
+    // console.log("form submission");
+    // console.log("Loading data");
+    // loadAnimation.style.display = "inline-block";
+
+    // // Basic GET request - this replaces the form Action
+    // const results = await fetch(
+    //   "https://data.princegeorgescountymd.gov/resource/sphi-rwax.json"
+    // );
+
+    // // This changes the response from the GET into data we can use - an "object"
+    // const storedList = await results.json();
+    // console.log(storedList);
+    // localStorage.setItem("storedData", JSON.stringify(storedList));
+    // parsedData = storedList;
+
+    // const chartData = parsedData;
+
+    // if (storedList?.length > 0) {
+    //   generateListButton.classList.remove("hidden");
+    // }
+
+    // loadAnimation.style.display = "none";
+    // console.table(storedList);
+    // injectHTML(storedList);
+
+   
     });
   
     generateListButton.addEventListener("click", (event) => {
       console.log("generate new list");
-      currentList = cutRestaurantList(parsedData);
+      currentList = parsedData;
       console.log(currentList);
       injectHTML(currentList);
-      markerPlace(currentList, carto);
     });
   
-    textField.addEventListener("input", (event) => {
-      console.log("input", event.target.value);
-      const newList = filterList(currentList, event.target.value);
-      console.log(newList);
-      injectHTML(newList);
-      markerPlace(newList, carto);
-    });
+    // textField.addEventListener("input", (event) => {
+    //   console.log("input", event.target.value);
+    //   const newList = filterList(currentList, event.target.value);
+    //   console.log(newList);
+    //   injectHTML(newList);
+    // });
   
     clearDataButton.addEventListener("click", (event) => {
       console.log('clear browser data');
       localStorage.clear();
       console.log('localStorage Check', localStorage.getItem("storedData"))
     })
+
+    generateChartButton.addEventListener("click", (event) => {
+        // tried to make a function to automate the creation of these labels, but I realized thatit was useless as if
+        // I am handpicking which lables I want anyway, it's a waste of time and doesn't make sense.
+        labels = [
+          "bakedgoods",
+          "cheese",
+          "crafts",
+          "flowers",
+          "eggs",
+          "seafood",
+          "herbs",
+          "vegetables",
+          "honey",
+          "jams",
+          "maple",
+          "meat",
+          "nursery",
+          "nuts",
+          "plants",
+          "poultry",
+          "prepared",
+          "soap",
+          "trees",
+          "wine",
+        ];
+        chartLabels = labels;
+        chartDatapoints = getChartData(chartData, labels);
+        initChart(chartTarget, chartLabels, chartDatapoints);
+      });
   }
   
   /*
