@@ -37,7 +37,6 @@ function initChart(chart, chartLabels, chartDatapoints) {
 }
 
 function getChartData(arr, labels) {
-  console.log(arr);
   keys = labels;
   entries = new Array(keys.length).fill(0);
   for (i = 0; i < arr.length; i++) {
@@ -53,7 +52,6 @@ function getChartData(arr, labels) {
     data[element] = entries[index];
   });
 
-  console.log(data);
   return data;
 }
 
@@ -62,7 +60,7 @@ async function mainEvent() {
   const clearDataButton = document.querySelector("#data_clear");
   const generateListButton = document.querySelector("#generate");
   const generateChartButton = document.querySelector("#generate_chart");
-  const textField = document.querySelector("#resto");
+  const textField = document.querySelector("#markets");
   const chartTarget = document.querySelector("#myChart");
 
   const storedData = localStorage.getItem("storedData");
@@ -101,6 +99,10 @@ async function mainEvent() {
     injectHTML(storedList);
   });
 
+  generateListButton.addEventListener("click", (event) => {
+
+  });
+
   generateChartButton.addEventListener("click", (event) => {
     // tried to make a function to automate the creation of these labels, but I realized thatit was useless as if
     // I am handpicking which lables I want anyway, it's a waste of time and doesn't make sense.
@@ -131,19 +133,19 @@ async function mainEvent() {
     initChart(chartTarget, chartLabels, chartDatapoints);
   });
 
+  textField.addEventListener("input", (event) => {
+    console.log("input", event.target.value);
+    // const newList = filterList(currentList, event.target.value);
+    // console.log(newList);
+    // injectHTML(newList);
+  });  
+
   //   generateListButton.addEventListener("click", (event) => {
   //     console.log("generate new list");
   //     currentList = cutRestaurantList(parsedData);
   //     console.log(currentList);
   //     injectHTML(currentList);
   //   });
-
-  // textField.addEventListener("input", (event) => {
-  //   console.log("input", event.target.value);
-  //   const newList = filterList(currentList, event.target.value);
-  //   console.log(newList);
-  //   injectHTML(newList);
-  // });
 
   // clearDataButton.addEventListener("click", (event) => {
   //   console.log('clear browser data');
